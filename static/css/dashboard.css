@@ -1,0 +1,7 @@
+/* Dashboard Portal Specific Styles */
+.dashboard-overview-banner {
+    background: linear-gradient(135deg, #0d9488 0%, #047857 100%);
+    color: white;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+}

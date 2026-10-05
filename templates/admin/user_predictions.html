@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}All User Predictions | SynthSoma Admin{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <div class="admin-header">
+        <div>
+            <h2><i class="fa-solid fa-list-check"></i> System-Wide Prediction History</h2>
+            <p>Comprehensive audit log of all clinical inferences performed across all registered users.</p>
+        </div>
+        <div class="admin-top-actions">
+            <a href="{{ url_for('admin.export_admin_csv', module='all') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export System History (CSV)
+            </a>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters Strip -->
+    <div class="card p-3 mb-4">
+        <form action="{{ url_for('admin.user_predictions') }}" method="GET" class="pred-filter-form">
+            <div class="filter-grid">
+                <div class="form-group mb-0">
+                    <label class="form-label">User ID</label>
+                    <input type="text" name="user_id" value="{{ filters.user_id or '' }}" class="form-control" placeholder="Filter by User ID...">
+                </div>
+                <div class="form-group mb-0">
+                    <label class="form-label">Module Type</label>
+                    <select name="module" class="form-select">
+                        <option value="all" {% if filters.module == 'all' or not filters.module %}selected{% endif %}>All Modules</option>
+                        <option value="disease" {% if filters.module == 'disease' %}selected{% endif %}>Disease</option>
+                        <option value="medicine" {% if filters.module == 'medicine' %}selected{% endif %}>Medicine</option>
+                        <option value="precaution" {% if filters.module == 'precaution' %}selected{% endif %}>Precaution</option>
+                        <option value="risk_factor" {% if filters.module == 'risk_factor' %}selected{% endif %}>Risk Factor</option>
+                    </select>
+                </div>
+                <div class="form-group mb-0">
+                    <label class="form-label">Search Keyword</label>
+                    <input type="text" name="search" value="{{ filters.search or '' }}" class="form-control" placeholder="Disease, symptom, user...">
+                </div>
+                <div class="form-group mb-0">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date" value="{{ filters.start_date or '' }}" class="form-control">
+                </div>
+                <div class="form-group mb-0">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date" value="{{ filters.end_date or '' }}" class="form-control">
+                </div>
+                <div class="form-group mb-0 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Master Prediction Table -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Prediction Records ({{ total }} Found)</h4>
+        </div>
+        {% if predictions %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Name</th>
+                        <th>User ID</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Module</th>
+                        <th>Input Parameters</th>
+                        <th>Prediction Result</th>
+                        <th>Date & Time</th>
+                        <th>PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td>#{{ p.id }}</td>
+                        <td><strong>{{ p.user.name if p.user else 'Unknown' }}</strong></td>
+                        <td><code>{{ p.user_id }}</code></td>
+                        <td><small>{{ p.user.email if p.user else '-' }}</small></td>
+                        <td><small>{{ p.user.phone if p.user else '-' }}</small></td>
+                        <td><small>{{ p.user.location if p.user else '-' }}</small></td>
+                        <td><span class="badge badge-{{ p.module }}">{{ p.module.replace('_', ' ') }}</span></td>
+                        <td style="max-width: 180px;" class="text-truncate" title="{{ p.input_summary }}">{{ p.input_summary }}</td>
+                        <td style="max-width: 200px;" class="text-truncate font-weight-bold" title="{{ p.result_summary }}">{{ p.result_summary }}</td>
+                        <td><small>{{ p.created_at|datetime }}</small></td>
+                        <td>
+                            <a href="{{ url_for('report.download_pdf', prediction_id=p.id) }}" class="btn btn-primary btn-sm" title="Download Official PDF Report">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('admin.user_predictions', page=p, user_id=filters.user_id, module=filters.module, search=filters.search, start_date=filters.start_date, end_date=filters.end_date) }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <p class="text-muted">No prediction records found matching the applied filters.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) 100px;
+    gap: 12px;
+    align-items: flex-end;
+}
+@media (max-width: 768px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

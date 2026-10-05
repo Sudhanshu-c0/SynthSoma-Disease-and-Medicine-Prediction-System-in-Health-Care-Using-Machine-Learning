@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Clinical Dashboard | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container dashboard-container">
+    <!-- Welcome Header -->
+    <div class="dashboard-header">
+        <div class="dashboard-title-wrap">
+            <h1>Clinical Intelligence <span>Dashboard</span></h1>
+            <p>Welcome, <strong>{{ user.name }}</strong> (User ID: <code>{{ user.user_id }}</code>) &bull; Location: {{ user.location }}</p>
+        </div>
+        <div class="dashboard-quick-actions">
+            <a href="{{ url_for('export.export_csv', module='all') }}" class="btn btn-outline btn-sm"><i class="fa-solid fa-file-csv"></i> Export My CSV</a>
+            <a href="{{ url_for('profile.view_profile') }}" class="btn btn-outline btn-sm"><i class="fa-solid fa-user-gear"></i> My Profile</a>
+        </div>
+    </div>
+
+    {% if user.is_admin %}
+    <div class="admin-notice-card">
+        <div class="admin-notice-content">
+            <i class="fa-solid fa-shield-halved admin-notice-icon"></i>
+            <div>
+                <h4>Administrative Privileges Active</h4>
+                <p>You have access to system-wide analytics, user registries, and 7-day prediction distributions.</p>
+            </div>
+        </div>
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Admin Panel</a>
+    </div>
+    {% endif %}
+
+    <!-- Personal Stats Strip -->
+    <div class="stats-overview-grid">
+        <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-total"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div class="stat-details">
+                <span class="stat-val">{{ stats.total_predictions }}</span>
+                <span class="stat-desc">Total Predictions Made</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-disease"><i class="fa-solid fa-virus-covid"></i></div>
+            <div class="stat-details">
+                <span class="stat-val">{{ stats.breakdown.get('disease', 0) }}</span>
+                <span class="stat-desc">Disease Inferences</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-med"><i class="fa-solid fa-pills"></i></div>
+            <div class="stat-details">
+                <span class="stat-val">{{ stats.breakdown.get('medicine', 0) }}</span>
+                <span class="stat-desc">Medicine Consults</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrap stat-icon-prec"><i class="fa-solid fa-shield-heart"></i></div>
+            <div class="stat-details">
+                <span class="stat-val">{{ stats.breakdown.get('precaution', 0) + stats.breakdown.get('risk_factor', 0) }}</span>
+                <span class="stat-desc">Precaution & Risk Queries</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Four Clinical Modules Navigation Grid -->
+    <h3 class="section-title"><i class="fa-solid fa-grid-2"></i> Clinical Prediction Engines</h3>
+    <div class="modules-portal-grid">
+        <!-- 1. Disease Prediction -->
+        <a href="{{ url_for('disease.disease_form') }}" class="portal-card portal-card-teal">
+            <div class="portal-header">
+                <span class="portal-badge">Engine 01</span>
+                <i class="fa-solid fa-virus-covid portal-icon"></i>
+            </div>
+            <h4>Disease Prediction</h4>
+            <p>Input or choose from 131 symptoms to infer disease probabilities using calibrated ML models.</p>
+            <span class="portal-cta">Launch Engine <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- 2. Medicine Prediction -->
+        <a href="{{ url_for('medicine.medicine_form') }}" class="portal-card portal-card-blue">
+            <div class="portal-header">
+                <span class="portal-badge">Engine 02</span>
+                <i class="fa-solid fa-pills portal-icon"></i>
+            </div>
+            <h4>Medicine Reference</h4>
+            <p>Query model-based reference medicines, pharmaceutical compositions, and clinical descriptions.</p>
+            <span class="portal-cta">Launch Engine <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- 3. Suggest Precaution -->
+        <a href="{{ url_for('precaution.precaution_form') }}" class="portal-card portal-card-amber">
+            <div class="portal-header">
+                <span class="portal-badge">Engine 03</span>
+                <i class="fa-solid fa-shield-heart portal-icon"></i>
+            </div>
+            <h4>Suggest Precautions</h4>
+            <p>Retrieve evidence-backed clinical prevention steps, lifestyle cautions, and daily guidelines.</p>
+            <span class="portal-cta">Launch Engine <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- 4. Analyse Risk Factor -->
+        <a href="{{ url_for('risk_factor.risk_factor_form') }}" class="portal-card portal-card-rose">
+            <div class="portal-header">
+                <span class="portal-badge">Engine 04</span>
+                <i class="fa-solid fa-heart-pulse portal-icon"></i>
+            </div>
+            <h4>Analyse Risk Factors</h4>
+            <p>Inspect epidemiological occurrence frequencies and specific pathology risk factors.</p>
+            <span class="portal-cta">Launch Engine <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+    </div>
+
+    <!-- Recent History Section -->
+    <div class="recent-history-section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Clinical Predictions</h4>
+                <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-sm">View Full History</a>
+            </div>
+
+            {% if recent_history %}
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Module</th>
+                            <th>Input Summary</th>
+                            <th>Result Summary</th>
+                            <th>Date & Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in recent_history %}
+                        <tr>
+                            <td>#{{ item.id }}</td>
+                            <td><span class="badge badge-{{ item.module }}">{{ item.module.replace('_', ' ') }}</span></td>
+                            <td class="text-truncate" style="max-width: 200px;">{{ item.input_summary }}</td>
+                            <td class="text-truncate font-weight-bold" style="max-width: 250px;"><strong>{{ item.result_summary }}</strong></td>
+                            <td>{{ item.created_at|datetime }}</td>
+                            <td>
+                                <a href="{{ url_for('report.download_pdf', prediction_id=item.id) }}" class="btn btn-outline btn-sm" title="Download PDF Report">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state text-center">
+                <i class="fa-solid fa-folder-open empty-icon"></i>
+                <p>No predictions recorded yet. Launch one of the four modules above to begin!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-container {
+    padding-top: 30px;
+}
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.dashboard-title-wrap h1 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+.dashboard-title-wrap h1 span {
+    color: var(--primary);
+}
+.dashboard-title-wrap p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.dashboard-quick-actions {
+    display: flex;
+    gap: 10px;
+}
+.admin-notice-card {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.admin-notice-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.admin-notice-icon {
+    font-size: 24px;
+    color: #b91c1c;
+}
+.admin-notice-content h4 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #991b1b;
+}
+.admin-notice-content p {
+    font-size: 13px;
+    color: #7f1d1d;
+}
+.stats-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+}
+.stat-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.stat-icon-total { background-color: #f1f5f9; color: var(--dark); }
+.stat-icon-disease { background-color: var(--primary-light); color: var(--primary-hover); }
+.stat-icon-med { background-color: #e0f2fe; color: #0284c7; }
+.stat-icon-prec { background-color: #fef3c7; color: #d97706; }
+.stat-val {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.1;
+    display: block;
+}
+.stat-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title i {
+    color: var(--primary);
+}
+.modules-portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+}
+.portal-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.portal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+.portal-card-teal:hover { border-color: var(--primary); }
+.portal-card-blue:hover { border-color: var(--secondary); }
+.portal-card-amber:hover { border-color: var(--warning); }
+.portal-card-rose:hover { border-color: #e11d48; }
+
+.portal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.portal-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+}
+.portal-icon {
+    font-size: 24px;
+}
+.portal-card-teal .portal-icon { color: var(--primary); }
+.portal-card-blue .portal-icon { color: var(--secondary); }
+.portal-card-amber .portal-icon { color: var(--warning); }
+.portal-card-rose .portal-icon { color: #e11d48; }
+
+.portal-card h4 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+.portal-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+.portal-cta {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.empty-state {
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}

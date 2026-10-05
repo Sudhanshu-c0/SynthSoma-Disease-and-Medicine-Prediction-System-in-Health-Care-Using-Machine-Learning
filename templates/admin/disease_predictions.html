@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Predictions Log | SynthSoma Admin{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <div class="admin-header">
+        <div>
+            <h2><i class="fa-solid fa-virus-covid"></i> System Disease Inferences Log</h2>
+            <p>Database records for all user disease predictions.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.export_admin_csv', module='disease') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export Disease Log (CSV)
+            </a>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="card p-3 mb-4">
+        <form action="{{ url_for('admin.disease_predictions') }}" method="GET" class="d-flex gap-2">
+            <input type="text" name="search" value="{{ search or '' }}" class="form-control" placeholder="Search by User ID, Disease, or Symptoms...">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="card">
+        {% if records %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>Predicted Disease</th>
+                        <th>Confidence</th>
+                        <th>Classifier Used</th>
+                        <th>Symptoms</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    <tr>
+                        <td>#{{ r.id }}</td>
+                        <td><code>{{ r.user_id }}</code></td>
+                        <td><strong>{{ r.predicted_disease }}</strong></td>
+                        <td>
+                            {% if r.confidence is not none %}
+                            <span class="badge badge-disease">{{ (r.confidence * 100)|round(1) }}%</span>
+                            {% else %}
+                            <span class="text-muted">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td><small>{{ r.model_used }}</small></td>
+                        <td style="max-width: 250px;" class="text-truncate">{{ r.selected_symptoms }}</td>
+                        <td>{{ r.created_at|datetime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('admin.disease_predictions', page=p, search=search) }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <p class="text-muted">No disease records found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

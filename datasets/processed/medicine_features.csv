@@ -1,0 +1,100 @@
+Disease_Name,Medicine_Name,Medicine_List_Joined
+acne,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+adenomyosis,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+adhd,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+alzheimer's,['cholinesterase inhibitors'],cholinesterase inhibitors
+amnesia,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+anemia,['Ferrous sulfate'],Ferrous sulfate
+ankylosing spondylitis,"['immunosuppressive drug', 'steroid']",immunosuppressive drug; steroid
+anthrax,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+anxiety disorders,"['Sedative', 'Selective serotonin reuptake inhibitors (SSRIs)']",Sedative; Selective serotonin reuptake inhibitors (SSRIs)
+arthritis,['Steroid'],Steroid
+ascariasis,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+asthma,"['Albuterol', 'Levalbuterol', 'Metaproterenol Sulfate']",Albuterol; Levalbuterol; Metaproterenol Sulfate
+autism,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+bird flu,['Oseltamivir (Tamiflu)'],Oseltamivir (Tamiflu)
+bladder stones,['No medicine....'],No medicine....
+brain hemorrhage,['Antihypertensive drug'],Antihypertensive drug
+breast cysts,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+bronchitis,['Analgesic'],Analgesic
+cerebral palsy,['Sedative'],Sedative
+cervical spondylosis,"['Nonsteroidal anti-inflammatory drugs (NSAIDs)', 'analgesic']",Nonsteroidal anti-inflammatory drugs (NSAIDs); analgesic
+chicken pox,"['Analgesic', 'Antihistamine']",Analgesic; Antihistamine
+chikungunya,['Analgesic'],Analgesic
+chlamydia,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+cholera,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+chronic cholestasis,['Ursodeoxycholic acid (UDCA)'],Ursodeoxycholic acid (UDCA)
+cirrhosis,"['Antiviral drugs', 'Isoniazid (antibiotics)']",Antiviral drugs; Isoniazid (antibiotics)
+common cold,"['Analgesic', 'Nasal decongestants']",Analgesic; Nasal decongestants
+conjunctivitis,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+cystic fibrosis,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+dementia,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+dengue,['Analgesic'],Analgesic
+depression,['Selective serotonin reuptake inhibitors (SSRIs)'],Selective serotonin reuptake inhibitors (SSRIs)
+diabetes,"['DPP-4 inhibitors', 'GLP-1 receptor agonists', 'Insulin', 'Meglitinides', 'Metformin', 'SGLT2 inhibitors', 'Sulfonylureas', 'Thiazolidinediones']",DPP-4 inhibitors; GLP-1 receptor agonists; Insulin; Meglitinides; Metformin; SGLT2 inhibitors; Sulfonylureas; Thiazolidinediones
+diphtheria,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+down syndrome,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+drug allergy,"['Antihistamine', 'Steroid']",Antihistamine; Steroid
+e. coli infection,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+eczema,"['Antihistamine', 'steroid']",Antihistamine; steroid
+epilepsy,['Lyrics(pregabalin)'],Lyrics(pregabalin)
+fibromyalgia,"['Analgesic', 'Selective serotonin reuptake inhibitors (SSRIs)']",Analgesic; Selective serotonin reuptake inhibitors (SSRIs)
+food allergy,['Antihistamine'],Antihistamine
+fungal infection,"['Antifungal liquids', 'Antifungal sprays', 'Antifungal\xa0cream']",Antifungal liquids; Antifungal sprays; Antifungal cream
+gallstones,['Statin'],Statin
+gastritis,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+gastroenteritis,"['Imodium', 'Pepto-Bismol,']","Imodium; Pepto-Bismol,"
+gerd,"['Antidiarrhoeal', 'Proton-pump inhibitor', 'antacid']",Antidiarrhoeal; Proton-pump inhibitor; antacid
+giardiasis,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+gonorrhoea,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+gout,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+heart attack,['intravenous'],intravenous
+hepatitis a,['No Medicine'],No Medicine
+herpes,['Oseltamivir (Tamiflu)'],Oseltamivir (Tamiflu)
+hypertension,"['Acebutolol (Sectral)', 'Benazepril (Lotensin)']",Acebutolol (Sectral); Benazepril (Lotensin)
+hypoglycemia,['Levothyroxine'],Levothyroxine
+hypothyroidism,['Levothyroxine'],Levothyroxine
+impetigo,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+insomnia,['antihistamine'],antihistamine
+iritis,['steroid'],steroid
+jaundice,['No medicine (consult doctor immediately)'],No medicine (consult doctor immediately)
+kidney stones,['diuretic'],diuretic
+leprosy,"['Isoniazid (antibiotics)', 'steroid']",Isoniazid (antibiotics); steroid
+lupus,['steroid'],steroid
+lyme disease,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+malaria,"['Artemisinin-based combination therapies', 'Chloroquine phosphate']",Artemisinin-based combination therapies; Chloroquine phosphate
+measles,['Analgesic'],Analgesic
+meningitis,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+migraine,"['analgesic', 'antipsychotics', 'stimulant']",analgesic; antipsychotics; stimulant
+multiple sclerosis,"['immunosuppressive drug', 'steroid']",immunosuppressive drug; steroid
+mumps,['Analgesic'],Analgesic
+muscular dystrophy,['steroid'],steroid
+osteoarthritis,['Analgesic'],Analgesic
+paroxysmal positional vertigo,['No Medicine'],No Medicine
+pcos,['Metformin'],Metformin
+peptic ulcer,['Proton pump inhibitors'],Proton pump inhibitors
+phthiriasis,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+piles,"['Lidocaine', 'steroid']",Lidocaine; steroid
+pneumonia,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+polio,['polio vaccine (OPV)'],polio vaccine (OPV)
+psoriasis,['steroid'],steroid
+rabies,['Oseltamivir (Tamiflu)'],Oseltamivir (Tamiflu)
+rubella,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+salmonella,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+schizophrenia,['Abilify (aripiprazole)'],Abilify (aripiprazole)
+scleroderma,"['nifedipine', 'steroid']",nifedipine; steroid
+sickle cell anemia,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+smallpox,['tecovirimat (tpoxx)'],tecovirimat (tpoxx)
+stroke,['alteplase'],alteplase
+swine flu,"['Analgesic', 'Antiviral drugs']",Analgesic; Antiviral drugs
+tetanus,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+thrombocythemia,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+thyroid,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+tuberculosis,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+typhoid,"['Chloramphenicol', 'Penicillin']",Chloramphenicol; Penicillin
+urinary tract infection,"['Isoniazid (antibiotics)', 'Penicillin']",Isoniazid (antibiotics); Penicillin
+vaginosis,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+varicose veins,['no medicine (consult doctor immediately)'],no medicine (consult doctor immediately)
+whooping cough,['Isoniazid (antibiotics)'],Isoniazid (antibiotics)
+yellow fever,['no medicine available (consult doctor)'],no medicine available (consult doctor)
+zika,['no medicine available (consult doctor)'],no medicine available (consult doctor)

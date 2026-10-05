@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container profile-container">
+    <div class="profile-layout-grid">
+        <!-- User Info Card -->
+        <div class="card profile-main-card">
+            <div class="profile-header-strip">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <div>
+                    <h2>{{ user.name }}</h2>
+                    <span class="profile-role-tag {% if user.is_admin %}admin-role{% endif %}">{{ user.role|upper }}</span>
+                </div>
+            </div>
+
+            <div class="profile-info-list">
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-id-card"></i> User ID:</span>
+                    <span class="info-val"><code>{{ user.user_id }}</code></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-envelope"></i> Email:</span>
+                    <span class="info-val">{{ user.email }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-phone"></i> Phone:</span>
+                    <span class="info-val">{{ user.phone }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-location-dot"></i> Location:</span>
+                    <span class="info-val">{{ user.location }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-calendar-check"></i> Registered:</span>
+                    <span class="info-val">{{ user.created_at|datetime }}</span>
+                </div>
+            </div>
+
+            <div class="profile-actions-bar">
+                <a href="{{ url_for('profile.edit_profile') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-user-pen"></i> Edit Profile</a>
+                <a href="{{ url_for('profile.change_user_password') }}" class="btn btn-outline btn-sm"><i class="fa-solid fa-key"></i> Change Password</a>
+            </div>
+        </div>
+
+        <!-- Quick Stats Card -->
+        <div class="card profile-stats-card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-chart-simple"></i> Clinical Activity Summary</h4>
+            </div>
+            <div class="profile-stat-box">
+                <span class="p-stat-number">{{ stats.total_predictions }}</span>
+                <span class="p-stat-label">Total Clinical Predictions</span>
+            </div>
+            
+            <div class="breakdown-list">
+                <div class="breakdown-row">
+                    <span><i class="fa-solid fa-virus-covid text-teal"></i> Disease Predictions</span>
+                    <strong>{{ stats.breakdown.get('disease', 0) }}</strong>
+                </div>
+                <div class="breakdown-row">
+                    <span><i class="fa-solid fa-pills text-blue"></i> Medicine Consults</span>
+                    <strong>{{ stats.breakdown.get('medicine', 0) }}</strong>
+                </div>
+                <div class="breakdown-row">
+                    <span><i class="fa-solid fa-shield-heart text-amber"></i> Precaution Queries</span>
+                    <strong>{{ stats.breakdown.get('precaution', 0) }}</strong>
+                </div>
+                <div class="breakdown-row">
+                    <span><i class="fa-solid fa-heart-pulse text-rose"></i> Risk Factor Analyses</span>
+                    <strong>{{ stats.breakdown.get('risk_factor', 0) }}</strong>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-block btn-sm">View Full History</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-container {
+    padding-top: 30px;
+    max-width: 980px;
+}
+.profile-layout-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 24px;
+}
+.profile-header-strip {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary), #059669);
+    color: white;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-role-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    background-color: var(--primary-light);
+    color: var(--primary-hover);
+    margin-top: 4px;
+}
+.profile-role-tag.admin-role {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+.profile-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+    font-size: 13.5px;
+}
+.info-label {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.info-label i {
+    color: var(--primary);
+    width: 16px;
+}
+.info-val {
+    font-weight: 600;
+    color: var(--dark);
+}
+.profile-actions-bar {
+    display: flex;
+    gap: 12px;
+}
+.profile-stat-box {
+    background-color: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.p-stat-number {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.p-stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+.breakdown-row i {
+    margin-right: 6px;
+}
+@media (max-width: 768px) {
+    .profile-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

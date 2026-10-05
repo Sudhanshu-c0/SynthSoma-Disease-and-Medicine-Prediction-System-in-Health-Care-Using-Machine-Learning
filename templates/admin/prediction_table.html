@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Module</th>
+                <th>Input Summary</th>
+                <th>Result Summary</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in predictions %}
+            <tr>
+                <td>#{{ item.id }}</td>
+                <td><code>{{ item.user_id }}</code></td>
+                <td><span class="badge badge-{{ item.module }}">{{ item.module.replace('_', ' ') }}</span></td>
+                <td style="max-width: 200px;" class="text-truncate">{{ item.input_summary }}</td>
+                <td style="max-width: 250px;" class="text-truncate"><strong>{{ item.result_summary }}</strong></td>
+                <td>{{ item.created_at|datetime }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

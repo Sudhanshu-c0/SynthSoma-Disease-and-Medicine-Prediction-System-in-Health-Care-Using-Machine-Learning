@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Prediction Engine | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container clinical-form-wrapper">
+    <div class="form-hero-header">
+        <div class="engine-badge engine-badge-teal">
+            <i class="fa-solid fa-virus-covid"></i> Engine 01
+        </div>
+        <h2>Disease Prediction Engine</h2>
+        <p>Select symptoms from the 131 calibrated clinical features to predict the probable disease profile.</p>
+    </div>
+
+    <form action="{{ url_for('disease.predict') }}" method="POST" id="diseaseForm" class="clinical-card">
+        <!-- Classifier Selection -->
+        <div class="form-section">
+            <div class="section-label-wrap">
+                <label for="classifier" class="section-label">
+                    <i class="fa-solid fa-microchip"></i> Machine Learning Classifier Architecture
+                </label>
+                <span class="info-tip">Fitted on real clinical datasets</span>
+            </div>
+            <select name="classifier" id="classifier" class="form-select">
+                {% for clf in classifiers %}
+                    <option value="{{ clf }}" {% if clf == default_classifier %}selected{% endif %}>
+                        {{ clf }} {% if clf == default_classifier %}(Default Ensemble Standard){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Quick Text Input -->
+        <div class="form-section">
+            <label for="symptoms_text" class="section-label">
+                <i class="fa-solid fa-keyboard"></i> Quick Symptom Input (Comma-separated)
+            </label>
+            <input type="text" id="symptoms_text" name="symptoms_text" class="form-control" placeholder="e.g. high_fever, headache, chills, nausea">
+            <small class="form-hint">You may type symptoms here or select from the clinical dictionary below.</small>
+        </div>
+
+        <!-- Symptom Selector with Search -->
+        <div class="form-section">
+            <div class="symptom-picker-header">
+                <div>
+                    <label class="section-label mb-0">
+                        <i class="fa-solid fa-list-check"></i> Clinical Feature Dictionary (131 Symptoms)
+                    </label>
+                    <span class="selected-counter" id="selectedCounter">0 selected</span>
+                </div>
+                <div class="search-box-wrap">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="symptomSearch" class="form-control search-input" placeholder="Filter symptoms (e.g. fever, pain)...">
+                </div>
+            </div>
+
+            <!-- Selected Chips Tray -->
+            <div class="selected-chips-tray" id="selectedChipsTray" style="display: none;">
+                <span class="tray-label">Selected Features:</span>
+                <div id="chipsContainer" class="chip-container"></div>
+                <button type="button" id="clearAllBtn" class="btn btn-outline btn-sm clear-btn">Clear All</button>
+            </div>
+
+            <!-- Scrollable Symptom Checkbox Grid -->
+            <div class="symptom-grid-box" id="symptomGridBox">
+                {% for s in symptoms %}
+                <label class="symptom-item" data-name="{{ s.name|lower }}" data-code="{{ s.code }}">
+                    <input type="checkbox" name="symptoms" value="{{ s.code }}" class="symptom-checkbox">
+                    <span class="symptom-label">{{ s.name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-actions-bar">
+            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                <i class="fa-solid fa-stethoscope"></i> Run Disease Inference
+            </button>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.clinical-form-wrapper {
+    max-width: 920px;
+    padding-top: 30px;
+}
+.form-hero-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.engine-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    margin-bottom: 12px;
+}
+.engine-badge-teal { background-color: var(--primary-light); color: var(--primary-hover); }
+.form-hero-header h2 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+.form-hero-header p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+}
+.clinical-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    padding: 32px;
+}
+.form-section {
+    margin-bottom: 28px;
+}
+.section-label-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.section-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.section-label i {
+    color: var(--primary);
+}
+.info-tip {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+.form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    display: block;
+}
+.symptom-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.selected-counter {
+    display: inline-block;
+    background-color: var(--primary-light);
+    color: var(--primary-hover);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    margin-left: 8px;
+}
+.search-box-wrap {
+    position: relative;
+    width: 280px;
+}
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 13px;
+}
+.search-input {
+    padding-left: 36px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 13px;
+}
+.selected-chips-tray {
+    background-color: var(--bg-subtle);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.tray-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+.clear-btn {
+    margin-left: auto;
+}
+.symptom-grid-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 14px;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+.symptom-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.symptom-item:hover {
+    border-color: var(--primary);
+    background-color: var(--primary-subtle);
+}
+.symptom-item.checked {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+.symptom-checkbox {
+    accent-color: var(--primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.form-actions-bar {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('symptomSearch');
+    const symptomItems = document.querySelectorAll('.symptom-item');
+    const counter = document.getElementById('selectedCounter');
+    const tray = document.getElementById('selectedChipsTray');
+    const chipsContainer = document.getElementById('chipsContainer');
+    const clearBtn = document.getElementById('clearAllBtn');
+
+    // 1. Search Filter
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        symptomItems.forEach(item => {
+            const name = item.getAttribute('data-name');
+            if (name.includes(query)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // 2. Selection Management
+    function updateSelection() {
+        const checkedBoxes = document.querySelectorAll('.symptom-checkbox:checked');
+        counter.textContent = `${checkedBoxes.length} selected`;
+        
+        if (checkedBoxes.length > 0) {
+            tray.style.display = 'flex';
+            chipsContainer.innerHTML = '';
+            checkedBoxes.forEach(cb => {
+                const label = cb.closest('.symptom-item').querySelector('.symptom-label').textContent;
+                const chip = document.createElement('span');
+                chip.className = 'chip active';
+                chip.innerHTML = `${label} <i class="fa-solid fa-xmark remove-chip" data-val="${cb.value}"></i>`;
+                chipsContainer.appendChild(chip);
+            });
+        } else {
+            tray.style.display = 'none';
+            chipsContainer.innerHTML = '';
+        }
+
+        symptomItems.forEach(item => {
+            const cb = item.querySelector('.symptom-checkbox');
+            if (cb.checked) {
+                item.classList.add('checked');
+            } else {
+                item.classList.remove('checked');
+            }
+        });
+    }
+
+    symptomItems.forEach(item => {
+        const cb = item.querySelector('.symptom-checkbox');
+        cb.addEventListener('change', updateSelection);
+    });
+
+    // Remove chip handler
+    chipsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-chip')) {
+            const val = e.target.getAttribute('data-val');
+            const cb = document.querySelector(`.symptom-checkbox[value="${val}"]`);
+            if (cb) {
+                cb.checked = false;
+                updateSelection();
+            }
+        }
+    });
+
+    // Clear All handler
+    clearBtn.addEventListener('click', () => {
+        document.querySelectorAll('.symptom-checkbox:checked').forEach(cb => cb.checked = false);
+        updateSelection();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+
+{% block title %}SynthSoma | Clinical Reference Intelligence Platform{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container hero-container">
+        <div class="hero-badge">
+            <i class="fa-solid fa-microscope"></i> Multi-Module Clinical AI Platform
+        </div>
+        <h1 class="hero-title">
+            Intelligent Reference System for <span>Modern Healthcare</span>
+        </h1>
+        <p class="hero-lead">
+            SynthSoma provides four independent clinical reference engines: symptom-based disease classification, 
+            reference pharmaceutical formulations, validated lifestyle precautions, and epidemiological risk factor analysis.
+        </p>
+        
+        <div class="hero-actions">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-primary"><i class="fa-solid fa-gauge-high"></i> Launch Dashboard</a>
+                <a href="{{ url_for('disease.disease_form') }}" class="btn btn-secondary"><i class="fa-solid fa-virus-covid"></i> Predict Disease</a>
+            {% else %}
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Get Started Free</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal</a>
+            {% endif %}
+        </div>
+
+        <!-- Metric Counters -->
+        <div class="stats-counter-strip">
+            <div class="stat-box">
+                <span class="stat-number">131</span>
+                <span class="stat-label">Recognized Symptoms</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">{{ stats.diseases_count }}</span>
+                <span class="stat-label">Disease Profiles</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">{{ stats.medicines_count }}</span>
+                <span class="stat-label">Medicine Formulations</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">{{ stats.risk_profiles_count }}</span>
+                <span class="stat-label">Risk Models Analyzed</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container module-showcase-section">
+    <div class="section-header text-center">
+        <span class="subheading">Four Core Engines</span>
+        <h2>Explore Independent Healthcare Modules</h2>
+        <p>Each module operates with dedicated pre-trained machine learning architectures and real clinical reference datasets.</p>
+    </div>
+
+    <div class="module-cards-grid">
+        <!-- Module 1 -->
+        <div class="module-card">
+            <div class="module-icon icon-teal">
+                <i class="fa-solid fa-virus-covid"></i>
+            </div>
+            <h3>Disease Prediction</h3>
+            <p>Select or enter symptoms from 131 clinical features to evaluate disease likelihood using calibrated machine learning classifiers.</p>
+            <ul class="module-feature-list">
+                <li><i class="fa-solid fa-check"></i> Multi-classifier ensemble support</li>
+                <li><i class="fa-solid fa-check"></i> Integrated precautions & medicines lookup</li>
+                <li><i class="fa-solid fa-check"></i> Downloadable PDF clinical report</li>
+            </ul>
+            <a href="{{ url_for('disease.disease_form') }}" class="btn btn-outline btn-block">Enter Module <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-card">
+            <div class="module-icon icon-blue">
+                <i class="fa-solid fa-pills"></i>
+            </div>
+            <h3>Medicine Reference</h3>
+            <p>Query reference medicines, pharmaceutical compositions, and clinical descriptions for over 99 validated pathology conditions.</p>
+            <ul class="module-feature-list">
+                <li><i class="fa-solid fa-check"></i> MultiOutput TF-IDF classification</li>
+                <li><i class="fa-solid fa-check"></i> Detailed pharmaceutical compositions</li>
+                <li><i class="fa-solid fa-check"></i> Non-prescriptive reference protocol</li>
+            </ul>
+            <a href="{{ url_for('medicine.medicine_form') }}" class="btn btn-outline btn-block">Enter Module <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="module-card">
+            <div class="module-icon icon-amber">
+                <i class="fa-solid fa-shield-heart"></i>
+            </div>
+            <h3>Suggest Precautions</h3>
+            <p>Retrieve immediate evidence-based lifestyle and clinical precautions tailored to acute and chronic conditions.</p>
+            <ul class="module-feature-list">
+                <li><i class="fa-solid fa-check"></i> MultiLabelBinarizer output decoding</li>
+                <li><i class="fa-solid fa-check"></i> Actionable hygiene and dietary advice</li>
+                <li><i class="fa-solid fa-check"></i> PDF summary documentation</li>
+            </ul>
+            <a href="{{ url_for('precaution.precaution_form') }}" class="btn btn-outline btn-block">Enter Module <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="module-card">
+            <div class="module-icon icon-rose">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h3>Analyse Risk Factors</h3>
+            <p>Identify primary epidemiological risk factors and occurrence frequencies across 100 comprehensive clinical disease profiles.</p>
+            <ul class="module-feature-list">
+                <li><i class="fa-solid fa-check"></i> Char n-gram NearestNeighbors engine</li>
+                <li><i class="fa-solid fa-check"></i> Occurrence & prevalence metadata</li>
+                <li><i class="fa-solid fa-check"></i> Clinical risk stratification report</li>
+            </ul>
+            <a href="{{ url_for('risk_factor.risk_factor_form') }}" class="btn btn-outline btn-block">Enter Module <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Workflow Section -->
+<div class="workflow-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="subheading">System Architecture</span>
+            <h2>How SynthSoma Operates</h2>
+        </div>
+
+        <div class="workflow-steps-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h4>Clinical Data Intake</h4>
+                <p>User inputs symptoms or target pathology through validated, sanitized forms.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h4>Exact Feature Vectorization</h4>
+                <p>Data is transformed into the exact feature spaces of the fitted models and encoders.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h4>ML Inference</h4>
+                <p>Predictions are inferred through real trained models without synthetic data generation.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">04</div>
+                <h4>Report & Audit Log</h4>
+                <p>Results are stored securely with downloadable PDF and CSV export capabilities.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    background: linear-gradient(180deg, #f0fdfa 0%, #f8fafc 100%);
+    padding: 70px 0 50px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.hero-container {
+    text-align: center;
+    max-width: 860px;
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary-light);
+    color: var(--primary-hover);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    margin-bottom: 20px;
+}
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 46px;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.15;
+    margin-bottom: 18px;
+    letter-spacing: -1px;
+}
+.hero-title span {
+    color: var(--primary);
+}
+.hero-lead {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+.stats-counter-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 24px 16px;
+}
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid var(--border-color);
+}
+.stat-box:last-child {
+    border-right: none;
+}
+.stat-number {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.module-showcase-section {
+    padding: 70px 20px;
+}
+.section-header {
+    margin-bottom: 45px;
+}
+.section-header .subheading {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 8px;
+}
+.section-header h2 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 12px;
+}
+.section-header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.text-center {
+    text-align: center;
+}
+.module-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+.module-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+}
+.module-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.icon-teal { background-color: var(--primary-light); color: var(--primary-hover); }
+.icon-blue { background-color: #e0f2fe; color: #0284c7; }
+.icon-amber { background-color: #fef3c7; color: #d97706; }
+.icon-rose { background-color: #ffe4e6; color: #e11d48; }
+
+.module-card h3 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+.module-card p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 18px;
+    flex-grow: 1;
+}
+.module-feature-list {
+    list-style: none;
+    margin-bottom: 24px;
+}
+.module-feature-list li {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.module-feature-list li i {
+    color: var(--success);
+    font-size: 11px;
+}
+.workflow-section {
+    background-color: var(--bg-surface);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 70px 20px;
+}
+.workflow-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+.step-card {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    position: relative;
+}
+.step-number {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+.step-card h4 {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--dark);
+}
+.step-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+@media (max-width: 768px) {
+    .hero-title { font-size: 32px; }
+    .stats-counter-strip { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .stat-box { border-right: none; }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,6 @@
+/* Authentication Styles */
+.auth-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+}

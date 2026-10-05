@@ -1,0 +1,42 @@
+Disease,Precautions_List,Precautions_Joined
+(vertigo) paroymsal  positional vertigo,"['avoid abrupt head movment', 'avoid sudden change in body', 'lie down', 'relax']",avoid abrupt head movment; avoid sudden change in body; lie down; relax
+acne,"['avoid fatty spicy food', 'avoid too many products', 'bath twice', 'drink plenty of water']",avoid fatty spicy food; avoid too many products; bath twice; drink plenty of water
+aids,"['avoid open cuts', 'consult doctor', 'follow up', 'wear ppe if possible']",avoid open cuts; consult doctor; follow up; wear ppe if possible
+alcoholic hepatitis,"['consult doctor', 'follow up', 'medication', 'stop alcohol consumption']",consult doctor; follow up; medication; stop alcohol consumption
+allergy,"['apply calamine', 'cover area with bandage', 'use ice to compress itching']",apply calamine; cover area with bandage; use ice to compress itching
+arthritis,"['exercise', 'massage', 'try acupuncture', 'use hot and cold therapy']",exercise; massage; try acupuncture; use hot and cold therapy
+bronchial asthma,"['get away from trigger', 'seek help', 'switch to loose cloothing', 'take deep breaths']",get away from trigger; seek help; switch to loose cloothing; take deep breaths
+cervical spondylosis,"['consult doctor', 'exercise', 'take otc pain reliver', 'use heating pad or cold pack']",consult doctor; exercise; take otc pain reliver; use heating pad or cold pack
+chicken pox,"['avoid public places', 'consume neem leaves', 'take vaccine', 'use neem in bathing']",avoid public places; consume neem leaves; take vaccine; use neem in bathing
+chronic cholestasis,"['anti itch medicine', 'cold baths', 'consult doctor', 'eat healthy']",anti itch medicine; cold baths; consult doctor; eat healthy
+common cold,"['avoid cold food', 'drink vitamin c rich drinks', 'keep fever in check', 'take vapour']",avoid cold food; drink vitamin c rich drinks; keep fever in check; take vapour
+dengue,"['avoid fatty spicy food', 'drink papaya leaf juice', 'keep hydrated', 'keep mosquitos away']",avoid fatty spicy food; drink papaya leaf juice; keep hydrated; keep mosquitos away
+diabetes,"['consult doctor', 'exercise', 'follow up', 'have balanced diet']",consult doctor; exercise; follow up; have balanced diet
+dimorphic hemmorhoids(piles),"['avoid fatty spicy food', 'consume alovera juice', 'consume witch hazel', 'warm bath with epsom salt']",avoid fatty spicy food; consume alovera juice; consume witch hazel; warm bath with epsom salt
+drug reaction,"['consult nearest hospital', 'follow up', 'stop irritation', 'stop taking drug']",consult nearest hospital; follow up; stop irritation; stop taking drug
+fungal infection,"['bath twice', 'keep infected area dry', 'use clean cloths', 'use detol or neem in bathing water']",bath twice; keep infected area dry; use clean cloths; use detol or neem in bathing water
+gastroenteritis,"['ease back into eating', 'rest', 'stop eating solid food for while', 'try taking small sips of water']",ease back into eating; rest; stop eating solid food for while; try taking small sips of water
+gerd,"['avoid fatty spicy food', 'avoid lying down after eating', 'exercise', 'maintain healthy weight']",avoid fatty spicy food; avoid lying down after eating; exercise; maintain healthy weight
+heart attack,"['call ambulance', 'chew or swallow asprin', 'keep calm']",call ambulance; chew or swallow asprin; keep calm
+hepatitis a,"['avoid fatty spicy food', 'consult nearest hospital', 'medication', 'wash hands through']",avoid fatty spicy food; consult nearest hospital; medication; wash hands through
+hepatitis b,"['consult nearest hospital', 'eat healthy', 'medication', 'vaccination']",consult nearest hospital; eat healthy; medication; vaccination
+hepatitis c,"['consult nearest hospital', 'eat healthy', 'medication', 'vaccination']",consult nearest hospital; eat healthy; medication; vaccination
+hepatitis d,"['consult doctor', 'eat healthy', 'follow up', 'medication']",consult doctor; eat healthy; follow up; medication
+hepatitis e,"['consult doctor', 'medication', 'rest', 'stop alcohol consumption']",consult doctor; medication; rest; stop alcohol consumption
+hypertension,"['get proper sleep', 'meditation', 'reduce stress', 'salt baths']",get proper sleep; meditation; reduce stress; salt baths
+hyperthyroidism,"['eat healthy', 'massage', 'take radioactive iodine treatment', 'use lemon balm']",eat healthy; massage; take radioactive iodine treatment; use lemon balm
+hypoglycemia,"['check in pulse', 'consult doctor', 'drink sugary drinks', 'lie down on side']",check in pulse; consult doctor; drink sugary drinks; lie down on side
+hypothyroidism,"['eat healthy', 'exercise', 'get proper sleep', 'reduce stress']",eat healthy; exercise; get proper sleep; reduce stress
+impetigo,"['consult doctor', 'remove scabs with wet compressed cloth', 'soak affected area in warm water', 'use antibiotics']",consult doctor; remove scabs with wet compressed cloth; soak affected area in warm water; use antibiotics
+jaundice,"['consume milk thistle', 'drink plenty of water', 'eat fruits and high fiberous food', 'medication']",consume milk thistle; drink plenty of water; eat fruits and high fiberous food; medication
+malaria,"['avoid non veg food', 'avoid oily food', 'consult nearest hospital', 'keep mosquitos out']",avoid non veg food; avoid oily food; consult nearest hospital; keep mosquitos out
+migraine,"['consult doctor', 'meditation', 'reduce stress', 'use poloroid glasses in sun']",consult doctor; meditation; reduce stress; use poloroid glasses in sun
+osteoarthristis,"['acetaminophen', 'consult nearest hospital', 'follow up', 'salt baths']",acetaminophen; consult nearest hospital; follow up; salt baths
+paralysis (brain hemorrhage),"['consult doctor', 'eat healthy', 'exercise', 'massage']",consult doctor; eat healthy; exercise; massage
+peptic ulcer diseae,"['avoid fatty spicy food', 'consume probiotic food', 'eliminate milk', 'limit alcohol']",avoid fatty spicy food; consume probiotic food; eliminate milk; limit alcohol
+pneumonia,"['consult doctor', 'follow up', 'medication', 'rest']",consult doctor; follow up; medication; rest
+psoriasis,"['consult doctor', 'salt baths', 'stop bleeding using pressure', 'wash hands with warm soapy water']",consult doctor; salt baths; stop bleeding using pressure; wash hands with warm soapy water
+tuberculosis,"['consult doctor', 'cover mouth', 'medication', 'rest']",consult doctor; cover mouth; medication; rest
+typhoid,"['antiboitic therapy', 'consult doctor', 'eat high calorie vegitables', 'medication']",antiboitic therapy; consult doctor; eat high calorie vegitables; medication
+urinary tract infection,"['drink cranberry juice', 'drink plenty of water', 'increase vitamin c intake', 'take probiotics']",drink cranberry juice; drink plenty of water; increase vitamin c intake; take probiotics
+varicose veins,"['dont stand still for long', 'lie down flat and raise the leg high', 'use oinments', 'use vein compression']",dont stand still for long; lie down flat and raise the leg high; use oinments; use vein compression

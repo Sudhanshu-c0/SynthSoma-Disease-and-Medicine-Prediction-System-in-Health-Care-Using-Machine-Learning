@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Medicine Report Archive | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container history-container">
+    <div class="history-header">
+        <div>
+            <h2><i class="fa-solid fa-pills"></i> Medicine Reference Reports Archive</h2>
+            <p>Official PDF reports for medicine consultations.</p>
+        </div>
+    </div>
+    <div class="card p-4">
+        <p class="text-secondary">Please use the <a href="{{ url_for('report.report_list') }}">Reports Archive</a> to view and download all generated PDF reports.</p>
+    </div>
+</div>
+{% endblock %}

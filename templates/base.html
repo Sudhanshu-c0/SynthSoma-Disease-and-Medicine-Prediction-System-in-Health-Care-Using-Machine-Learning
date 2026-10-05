@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SynthSoma | Clinical Reference Intelligence Platform{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="synthsoma-body">
+    <!-- Navigation Header -->
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="{{ url_for('home.index') }}" class="brand-logo">
+                <div class="logo-icon-wrap">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-title">SYNTH<span>SOMA</span></span>
+                    <span class="brand-subtitle">Clinical Intelligence</span>
+                </div>
+            </a>
+
+            <!-- Mobile Navigation Toggle -->
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('home.index') }}" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+                    
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('dashboard.dashboard') }}" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                        
+                        <li class="dropdown-wrap">
+                            <button class="dropdown-btn"><i class="fa-solid fa-stethoscope"></i> Clinical Modules <i class="fa-solid fa-chevron-down"></i></button>
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('disease.disease_form') }}"><i class="fa-solid fa-virus-covid"></i> Disease Prediction</a>
+                                <a href="{{ url_for('medicine.medicine_form') }}"><i class="fa-solid fa-pills"></i> Medicine Reference</a>
+                                <a href="{{ url_for('precaution.precaution_form') }}"><i class="fa-solid fa-shield-heart"></i> Suggest Precautions</a>
+                                <a href="{{ url_for('risk_factor.risk_factor_form') }}"><i class="fa-solid fa-heart-pulse"></i> Analyse Risk Factors</a>
+                            </div>
+                        </li>
+                        
+                        <li><a href="{{ url_for('history.history_index') }}" class="nav-link"><i class="fa-solid fa-clock-rotate-left"></i> History</a></li>
+                        <li><a href="{{ url_for('report.report_list') }}" class="nav-link"><i class="fa-solid fa-file-pdf"></i> Reports</a></li>
+                        
+                        {% if current_user.is_admin %}
+                            <li><a href="{{ url_for('admin.admin_dashboard') }}" class="nav-link admin-pill"><i class="fa-solid fa-user-shield"></i> Admin Panel</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <div class="auth-action-wrap">
+                    {% if current_user.is_authenticated %}
+                        <div class="user-profile-menu">
+                            <a href="{{ url_for('profile.view_profile') }}" class="user-badge" title="My Profile">
+                                <i class="fa-solid fa-circle-user"></i>
+                                <span class="username">{{ current_user.name.split(' ')[0] }}</span>
+                                {% if current_user.is_admin %}
+                                    <span class="role-tag">Admin</span>
+                                {% endif %}
+                            </a>
+                            <a href="{{ url_for('auth.logout') }}" class="btn-logout" title="Sign Out">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn-secondary-nav">Sign In</a>
+                        <a href="{{ url_for('auth.signup') }}" class="btn-primary-nav">Register</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Messages Container -->
+    <main class="main-content">
+        <div class="container message-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <div class="alert-content">
+                                {% if category == 'success' %}
+                                    <i class="fa-solid fa-circle-check"></i>
+                                {% elif category == 'danger' %}
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                {% elif category == 'warning' %}
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-circle-info"></i>
+                                {% endif %}
+                                <span>{{ message }}</span>
+                            </div>
+                            <button type="button" class="close-alert" onclick="this.parentElement.remove();">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="brand-logo footer-logo">
+                        <i class="fa-solid fa-dna"></i>
+                        <span>SYNTH<span>SOMA</span></span>
+                    </div>
+                    <p class="brand-desc">
+                        A multi-module AI-powered healthcare intelligence system delivering symptom-based disease classification, 
+                        reference pharmaceutical formulations, lifestyle precautions, and epidemiological risk profiles.
+                    </p>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Clinical Modules</h4>
+                    <ul>
+                        <li><a href="{{ url_for('disease.disease_form') }}">Disease Prediction</a></li>
+                        <li><a href="{{ url_for('medicine.medicine_form') }}">Medicine Reference</a></li>
+                        <li><a href="{{ url_for('precaution.precaution_form') }}">Suggest Precautions</a></li>
+                        <li><a href="{{ url_for('risk_factor.risk_factor_form') }}">Analyse Risk Factors</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Account & Data</h4>
+                    <ul>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('history.history_index') }}">Prediction History</a></li>
+                            <li><a href="{{ url_for('export.export_csv', module='all') }}">Export All CSV</a></li>
+                            <li><a href="{{ url_for('profile.view_profile') }}">My Profile</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('auth.login') }}">User Sign In</a></li>
+                            <li><a href="{{ url_for('auth.signup') }}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>System Compliance</h4>
+                    <ul>
+                        <li><a href="#disclaimer-modal" onclick="openDisclaimerModal(event)">Medical Disclaimer</a></li>
+                        <li><a href="#architecture">Model Architecture</a></li>
+                        <li><a href="#contact">Support Helpdesk</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Medical Disclaimer Banner -->
+            <div class="footer-disclaimer-box">
+                <div class="disclaimer-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="disclaimer-text">
+                    <strong>Medical Disclaimer:</strong> {{ medical_disclaimer }}
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; {{ current_year }} SynthSoma Platform. All medical algorithms, datasets, and encoders preserved.</p>
+                <p class="build-ver">SynthSoma Academic Prototype | ML Ensemble Engine</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

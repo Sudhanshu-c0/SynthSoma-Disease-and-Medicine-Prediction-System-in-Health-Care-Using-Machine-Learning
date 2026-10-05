@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Clinical Reports Archive | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container history-container">
+    <div class="history-header">
+        <div>
+            <h2><i class="fa-solid fa-file-pdf"></i> Clinical PDF Reports Archive</h2>
+            <p>Download official SynthSoma clinical assessment and reference reports.</p>
+        </div>
+        <div class="history-actions">
+            <a href="{{ url_for('export.export_csv', module='all') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export Records (CSV)
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        {% if predictions %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>Module Type</th>
+                        <th>Clinical Target / Input</th>
+                        <th>Summary Findings</th>
+                        <th>Generated On</th>
+                        <th>Download Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td><strong>#REP-{{ p.id }}</strong></td>
+                        <td><span class="badge badge-{{ p.module }}">{{ p.module.replace('_', ' ') }}</span></td>
+                        <td style="max-width: 250px;" class="text-truncate">{{ p.input_summary }}</td>
+                        <td style="max-width: 250px;" class="text-truncate font-weight-bold">{{ p.result_summary }}</td>
+                        <td>{{ p.created_at|datetime }}</td>
+                        <td>
+                            <a href="{{ url_for('report.download_pdf', prediction_id=p.id) }}" class="btn btn-primary btn-sm">
+                                <i class="fa-solid fa-file-arrow-down"></i> Download PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <i class="fa-solid fa-file-circle-question empty-icon"></i>
+            <p class="text-muted">No diagnostic reports generated yet. Run an inference in any clinical module to generate a report.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

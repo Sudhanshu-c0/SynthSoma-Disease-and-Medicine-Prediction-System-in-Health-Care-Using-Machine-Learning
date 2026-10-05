@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container history-container">
+    <div class="history-header">
+        <div>
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> My Clinical Prediction History</h2>
+            <p>Access your past diagnostic inferences, download reports, or export records to CSV.</p>
+        </div>
+        <div class="history-actions">
+            <a href="{{ url_for('export.export_csv', module=active_module if active_module != 'all' else 'history') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export Current View (CSV)
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Tabs Strip -->
+    <div class="filter-tabs">
+        <a href="{{ url_for('history.history_index', module='all') }}" class="tab-item {% if active_module == 'all' or not active_module %}active{% endif %}">
+            <i class="fa-solid fa-bars"></i> All Modules
+        </a>
+        <a href="{{ url_for('history.disease_history') }}" class="tab-item">
+            <i class="fa-solid fa-virus-covid"></i> Disease Predictions
+        </a>
+        <a href="{{ url_for('history.medicine_history') }}" class="tab-item">
+            <i class="fa-solid fa-pills"></i> Medicine Consults
+        </a>
+        <a href="{{ url_for('history.precaution_history') }}" class="tab-item">
+            <i class="fa-solid fa-shield-heart"></i> Precautions
+        </a>
+        <a href="{{ url_for('history.risk_factor_history') }}" class="tab-item">
+            <i class="fa-solid fa-heart-pulse"></i> Risk Factors
+        </a>
+    </div>
+
+    <!-- History Table Card -->
+    <div class="card">
+        {% if predictions %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Module</th>
+                        <th>Clinical Input</th>
+                        <th>Output / Result</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td>#{{ p.id }}</td>
+                        <td><span class="badge badge-{{ p.module }}">{{ p.module.replace('_', ' ') }}</span></td>
+                        <td style="max-width: 250px;" class="text-truncate" title="{{ p.input_summary }}">{{ p.input_summary }}</td>
+                        <td style="max-width: 280px;" class="text-truncate font-weight-bold" title="{{ p.result_summary }}"><strong>{{ p.result_summary }}</strong></td>
+                        <td>{{ p.created_at|datetime }}</td>
+                        <td class="action-cell">
+                            {% if p.module == 'disease' %}
+                            <a href="{{ url_for('disease.view_result', prediction_id=p.id) }}" class="btn btn-outline btn-sm" title="View Result Details"><i class="fa-solid fa-eye"></i></a>
+                            {% elif p.module == 'medicine' %}
+                            <a href="{{ url_for('medicine.view_result', prediction_id=p.id) }}" class="btn btn-outline btn-sm" title="View Result Details"><i class="fa-solid fa-eye"></i></a>
+                            {% elif p.module == 'precaution' %}
+                            <a href="{{ url_for('precaution.view_result', prediction_id=p.id) }}" class="btn btn-outline btn-sm" title="View Result Details"><i class="fa-solid fa-eye"></i></a>
+                            {% elif p.module == 'risk_factor' %}
+                            <a href="{{ url_for('risk_factor.view_result', prediction_id=p.id) }}" class="btn btn-outline btn-sm" title="View Result Details"><i class="fa-solid fa-eye"></i></a>
+                            {% endif %}
+
+                            <a href="{{ url_for('report.download_pdf', prediction_id=p.id) }}" class="btn btn-primary btn-sm" title="Download PDF Report">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('history.history_index', module=active_module, page=p) }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state text-center">
+            <i class="fa-solid fa-clock-rotate-left empty-icon"></i>
+            <p>No records found in this history view.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.history-container {
+    padding-top: 30px;
+}
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.history-header h2 {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.history-header h2 i {
+    color: var(--primary);
+}
+.history-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.filter-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+.tab-item {
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.tab-item:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.tab-item.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.action-cell {
+    display: flex;
+    gap: 6px;
+}
+</style>
+{% endblock %}

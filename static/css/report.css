@@ -1,0 +1,4 @@
+/* PDF & Report Archive Styles */
+.report-doc-card {
+    border-left: 4px solid var(--primary);
+}

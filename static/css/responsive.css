@@ -1,0 +1,71 @@
+/* Responsive Stylesheet for SynthSoma */
+@media (max-width: 1024px) {
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-surface);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+        gap: 16px;
+    }
+
+    .nav-menu.open {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+        margin-top: 6px;
+    }
+
+    .auth-action-wrap {
+        flex-direction: column;
+        align-items: stretch;
+        border-top: 1px solid var(--border-color);
+        padding-top: 16px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+}

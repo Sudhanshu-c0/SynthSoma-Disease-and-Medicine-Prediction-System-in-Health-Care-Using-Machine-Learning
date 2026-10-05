@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Prediction Assessment | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container result-wrapper">
+    <!-- Breadcrumb & Header -->
+    <div class="result-header">
+        <a href="{{ url_for('disease.disease_form') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> New Symptom Assessment
+        </a>
+        <div class="action-buttons">
+            {% if result.id %}
+            <a href="{{ url_for('report.download_pdf', prediction_id=result.id) }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+            </a>
+            {% endif %}
+            <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-clock-rotate-left"></i> View History
+            </a>
+        </div>
+    </div>
+
+    <!-- Primary Prediction Hero Card -->
+    <div class="card result-hero-card">
+        <div class="result-hero-content">
+            <div class="badge-status-wrap">
+                <span class="badge badge-disease"><i class="fa-solid fa-virus-covid"></i> Primary Inferred Pathology</span>
+                <span class="model-badge"><i class="fa-solid fa-microchip"></i> Model: {{ result.model_used }}</span>
+            </div>
+            <h1 class="predicted-name">{{ result.predicted_disease }}</h1>
+            <p class="prediction-note">Inferred based on {{ result.selected_symptoms|length }} clinical features submitted.</p>
+        </div>
+
+        {% if result.confidence_percentage %}
+        <div class="confidence-gauge-box">
+            <span class="confidence-label">Model Confidence</span>
+            <span class="confidence-val">{{ result.confidence_percentage }}</span>
+            <div class="confidence-meter">
+                <div class="meter-fill" style="width: {{ result.confidence_percentage }};"></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Input Symptoms Submitted -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="card-title"><i class="fa-solid fa-clipboard-list"></i> Submitted Symptom Features ({{ result.selected_symptoms|length }})</h4>
+        </div>
+        <div class="chip-container">
+            {% for s in result.selected_symptoms %}
+            <span class="chip active"><i class="fa-solid fa-circle-dot"></i> {{ s }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Supporting Clinical Information Grid -->
+    <div class="details-cards-grid">
+        <!-- 1. Precautions -->
+        <div class="card detail-card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-shield-heart text-amber"></i> Recommended Precautions</h4>
+            </div>
+            {% if result.precautions %}
+            <ul class="clinical-list precaution-list">
+                {% for p in result.precautions %}
+                <li><i class="fa-solid fa-check-circle"></i> {{ p|capitalize }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">Standard preventative hygiene and clinical observation recommended.</p>
+            {% endif %}
+        </div>
+
+        <!-- 2. Risk Factors & Occurrence -->
+        <div class="card detail-card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-heart-pulse text-rose"></i> Risk Factors & Occurrence</h4>
+            </div>
+            <div class="mb-3">
+                <strong class="info-subtitle">Epidemiological Occurrence:</strong>
+                <p class="occurrence-text">{{ result.occurrence_frequency }}</p>
+            </div>
+            <div>
+                <strong class="info-subtitle">Primary Known Risk Factors:</strong>
+                {% if result.risk_factors %}
+                <ul class="clinical-list risk-list">
+                    {% for rf in result.risk_factors %}
+                    <li><i class="fa-solid fa-triangle-exclamation"></i> {{ rf }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">Baseline clinical profile.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 3. Reference Medicines -->
+        <div class="card detail-card col-span-2">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-pills text-blue"></i> Reference Medicines</h4>
+                <span class="badge badge-medicine">Reference Only</span>
+            </div>
+            {% if result.reference_medicines %}
+            <div class="chip-container mb-3">
+                {% for med in result.reference_medicines %}
+                <span class="chip"><i class="fa-solid fa-capsules"></i> {{ med }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted">Consult an attending clinician for medical pharmacotherapy guidance.</p>
+            {% endif %}
+            <small class="text-muted italic-disclaimer">
+                * Note: Reference pharmaceutical information is for clinical study only. Not a prescription. Do not self-medicate.
+            </small>
+        </div>
+    </div>
+
+    <!-- Medical Safety Disclaimer -->
+    <div class="disclaimer-alert-card mt-4">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+            <strong>Medical Notice:</strong> {{ result.disclaimer }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.result-wrapper {
+    max-width: 960px;
+    padding-top: 30px;
+}
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.back-link {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+.result-hero-card {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%);
+    border: 1.5px solid var(--primary-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.badge-status-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.model-badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background-color: var(--bg-subtle);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+}
+.predicted-name {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+.prediction-note {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.confidence-gauge-box {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px 24px;
+    min-width: 200px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+.confidence-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.confidence-val {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 8px;
+}
+.confidence-meter {
+    height: 6px;
+    background-color: var(--bg-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+.meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #059669);
+    border-radius: var(--radius-full);
+}
+.details-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.col-span-2 {
+    grid-column: span 2;
+}
+.clinical-list {
+    list-style: none;
+}
+.clinical-list li {
+    font-size: 13.5px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.4;
+}
+.precaution-list li i {
+    color: var(--primary);
+    margin-top: 3px;
+}
+.risk-list li i {
+    color: var(--danger);
+    margin-top: 3px;
+}
+.text-amber { color: var(--warning); }
+.text-rose { color: #e11d48; }
+.text-blue { color: var(--secondary); }
+.info-subtitle {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+.occurrence-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+}
+.italic-disclaimer {
+    display: block;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+.disclaimer-alert-card {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: #92400e;
+    font-size: 13px;
+}
+.disclaimer-alert-card i {
+    font-size: 20px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+@media (max-width: 768px) {
+    .details-cards-grid { grid-template-columns: 1fr; }
+    .col-span-2 { grid-column: span 1; }
+    .predicted-name { font-size: 26px; }
+}
+</style>
+{% endblock %}

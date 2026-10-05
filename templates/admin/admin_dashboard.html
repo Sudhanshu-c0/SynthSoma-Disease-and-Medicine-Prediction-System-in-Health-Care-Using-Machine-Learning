@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Intelligence Center | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div>
+            <div class="admin-badge">
+                <i class="fa-solid fa-user-shield"></i> System Administration
+            </div>
+            <h2>Clinical Platform Overview</h2>
+            <p>Real-time system telemetry, last 7-day prediction distributions, and user administration.</p>
+        </div>
+        <div class="admin-top-actions">
+            <a href="{{ url_for('admin.export_admin_csv', module='all') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export All System Predictions (CSV)
+            </a>
+            <a href="{{ url_for('admin.user_details') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-users"></i> Manage Users
+            </a>
+        </div>
+    </div>
+
+    <!-- Master 3 Stats Counter -->
+    <div class="admin-stats-strip">
+        <div class="stat-metric-card">
+            <div class="metric-icon metric-icon-users"><i class="fa-solid fa-users"></i></div>
+            <div class="metric-info">
+                <span class="metric-val">{{ stats.total_users }}</span>
+                <span class="metric-lbl">Total Registered Users</span>
+            </div>
+        </div>
+
+        <div class="stat-metric-card">
+            <div class="metric-icon metric-icon-preds"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="metric-info">
+                <span class="metric-val">{{ stats.total_predictions }}</span>
+                <span class="metric-lbl">Total System Inferences</span>
+            </div>
+        </div>
+
+        <div class="stat-metric-card">
+            <div class="metric-icon metric-icon-diseases"><i class="fa-solid fa-shield-virus"></i></div>
+            <div class="metric-info">
+                <span class="metric-val">{{ stats.total_known_diseases }}</span>
+                <span class="metric-lbl">Recognized Disease Classes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Quick Navigation Tabs -->
+    <div class="admin-nav-tabs">
+        <a href="{{ url_for('admin.user_details') }}" class="admin-tab"><i class="fa-solid fa-user-gear"></i> User Details</a>
+        <a href="{{ url_for('admin.user_predictions') }}" class="admin-tab"><i class="fa-solid fa-list-check"></i> All User Predictions</a>
+        <a href="{{ url_for('admin.disease_predictions') }}" class="admin-tab"><i class="fa-solid fa-virus-covid"></i> Disease Log</a>
+        <a href="{{ url_for('admin.medicine_predictions') }}" class="admin-tab"><i class="fa-solid fa-pills"></i> Medicine Log</a>
+        <a href="{{ url_for('admin.precaution_predictions') }}" class="admin-tab"><i class="fa-solid fa-shield-heart"></i> Precaution Log</a>
+        <a href="{{ url_for('admin.risk_factor_predictions') }}" class="admin-tab"><i class="fa-solid fa-heart-pulse"></i> Risk Factor Log</a>
+    </div>
+
+    <!-- 7-Day Analytics Tables Grid -->
+    <div class="analytics-grid">
+        <!-- Top Predicted Diseases (Last 7 Days) -->
+        <div class="card analytics-card">
+            <div class="card-header">
+                <div>
+                    <h4 class="card-title"><i class="fa-solid fa-ranking-star text-teal"></i> Top Predicted Diseases &mdash; Last 7 Days</h4>
+                    <small class="text-muted">Calculated strictly from real database records (rolling 7 days)</small>
+                </div>
+                <a href="{{ url_for('admin.top_predicted_diseases') }}" class="btn btn-outline btn-sm">Full Table</a>
+            </div>
+
+            {% if stats.top_diseases_7days %}
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Disease Name</th>
+                            <th>Prediction Count</th>
+                            <th>Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in stats.top_diseases_7days %}
+                        <tr>
+                            <td><span class="rank-badge">#{{ loop.index }}</span></td>
+                            <td><strong>{{ item.disease }}</strong></td>
+                            <td><span class="count-pill">{{ item.count }}</span></td>
+                            <td style="width: 35%;">
+                                <div class="dist-bar-wrap">
+                                    <div class="dist-bar dist-bar-teal" style="width: {{ (item.count / stats.top_diseases_7days[0].count * 100)|round }}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state text-center p-4">
+                <i class="fa-solid fa-chart-simple empty-icon"></i>
+                <p>No disease predictions recorded in the last 7 days.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Top Predicted Medicines (Last 7 Days) -->
+        <div class="card analytics-card">
+            <div class="card-header">
+                <div>
+                    <h4 class="card-title"><i class="fa-solid fa-prescription text-blue"></i> Top Predicted Medicines &mdash; Last 7 Days</h4>
+                    <small class="text-muted">Calculated strictly from real database records (rolling 7 days)</small>
+                </div>
+                <a href="{{ url_for('admin.top_predicted_medicines') }}" class="btn btn-outline btn-sm">Full Table</a>
+            </div>
+
+            {% if stats.top_medicines_7days %}
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Medicine Formulation</th>
+                            <th>Consult Count</th>
+                            <th>Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in stats.top_medicines_7days %}
+                        <tr>
+                            <td><span class="rank-badge">#{{ loop.index }}</span></td>
+                            <td><strong>{{ item.medicine }}</strong></td>
+                            <td><span class="count-pill">{{ item.count }}</span></td>
+                            <td style="width: 35%;">
+                                <div class="dist-bar-wrap">
+                                    <div class="dist-bar dist-bar-blue" style="width: {{ (item.count / stats.top_medicines_7days[0].count * 100)|round }}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state text-center p-4">
+                <i class="fa-solid fa-capsules empty-icon"></i>
+                <p>No medicine predictions recorded in the last 7 days.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent System Activity Log -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Real-time Platform Predictions Log</h4>
+            <a href="{{ url_for('admin.user_predictions') }}" class="btn btn-outline btn-sm">View All Predictions</a>
+        </div>
+        {% if recent_predictions %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Module</th>
+                        <th>Clinical Input</th>
+                        <th>Model Result</th>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in recent_predictions %}
+                    <tr>
+                        <td>#{{ p.id }}</td>
+                        <td><code>{{ p.user_id }}</code></td>
+                        <td>{{ p.user.name if p.user else p.user_id }}</td>
+                        <td><span class="badge badge-{{ p.module }}">{{ p.module.replace('_', ' ') }}</span></td>
+                        <td style="max-width: 180px;" class="text-truncate">{{ p.input_summary }}</td>
+                        <td style="max-width: 220px;" class="text-truncate"><strong>{{ p.result_summary }}</strong></td>
+                        <td>{{ p.created_at|datetime }}</td>
+                        <td>
+                            <a href="{{ url_for('report.download_pdf', prediction_id=p.id) }}" class="btn btn-primary btn-sm" title="Download Official PDF Report">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center p-4">No recent inferences registered.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-container {
+    padding-top: 30px;
+}
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    margin-bottom: 8px;
+}
+.admin-header h2 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+.admin-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.admin-top-actions {
+    display: flex;
+    gap: 10px;
+}
+.admin-stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 26px;
+}
+.stat-metric-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--shadow-sm);
+}
+.metric-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+.metric-icon-users { background-color: #e0f2fe; color: #0284c7; }
+.metric-icon-preds { background-color: var(--primary-light); color: var(--primary-hover); }
+.metric-icon-diseases { background-color: #fef3c7; color: #d97706; }
+.metric-val {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--dark);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.metric-lbl {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.admin-nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+.admin-tab {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.admin-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+.rank-badge {
+    font-weight: 800;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.count-pill {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 12px;
+}
+.dist-bar-wrap {
+    height: 8px;
+    background-color: var(--bg-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+.dist-bar {
+    height: 100%;
+    border-radius: var(--radius-full);
+}
+.dist-bar-teal { background-color: var(--primary); }
+.dist-bar-blue { background-color: var(--secondary); }
+@media (max-width: 900px) {
+    .admin-stats-strip { grid-template-columns: 1fr; }
+    .analytics-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}

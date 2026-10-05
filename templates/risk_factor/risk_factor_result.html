@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Factor Profile Assessment | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container result-wrapper">
+    <div class="result-header">
+        <a href="{{ url_for('risk_factor.risk_factor_form') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> New Risk Query
+        </a>
+        <div class="action-buttons">
+            {% if result.id %}
+            <a href="{{ url_for('report.download_pdf', prediction_id=result.id) }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+            </a>
+            {% endif %}
+            <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-clock-rotate-left"></i> View History
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="card result-hero-card">
+        <div class="result-hero-content">
+            <div class="badge-status-wrap">
+                <span class="badge badge-risk_factor"><i class="fa-solid fa-heart-pulse"></i> Epidemiological Profile</span>
+                <span class="model-badge"><i class="fa-solid fa-calculator"></i> Cosine Similarity: {{ result.similarity_score }}</span>
+            </div>
+            <h1 class="predicted-name">{{ result.matched_disease }}</h1>
+            <p class="prediction-note">Disease ID: #{{ result.disease_id }} &bull; Profile matched for {{ result.disease_input }}.</p>
+        </div>
+    </div>
+
+    <!-- Risk Factors Card Grid -->
+    <div class="details-cards-grid">
+        <!-- Occurrence Box -->
+        <div class="card detail-card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-earth-americas text-blue"></i> Occurrence & Prevalence</h4>
+            </div>
+            <div class="occurrence-box">
+                <span class="occurrence-badge"><i class="fa-solid fa-chart-pie"></i> Clinical Cohort</span>
+                <h3 class="occurrence-stat">{{ result.occurrence_frequency }}</h3>
+            </div>
+            {% if result.clinical_note %}
+            <div class="mt-3">
+                <strong class="info-subtitle">Associated Precautionary Guideline:</strong>
+                <p class="text-secondary font-italic">{{ result.clinical_note }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Risk Factors Box -->
+        <div class="card detail-card">
+            <div class="card-header">
+                <h4 class="card-title"><i class="fa-solid fa-triangle-exclamation text-rose"></i> Identified Risk Factors ({{ result.risk_factor_count }})</h4>
+            </div>
+            {% if result.risk_factors %}
+            <div class="risk-factors-list">
+                {% for rf in result.risk_factors %}
+                <div class="risk-factor-chip">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>{{ rf }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted">Standard baseline clinical risk profile.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="disclaimer-alert-card mt-4">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+            <strong>Notice:</strong> {{ result.disclaimer }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.occurrence-box {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+}
+.occurrence-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--secondary);
+    background-color: #e0f2fe;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    margin-bottom: 8px;
+}
+.occurrence-stat {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+}
+.risk-factors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.risk-factor-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 600;
+}
+.risk-factor-chip i {
+    color: #ef4444;
+}
+</style>
+{% endblock %}

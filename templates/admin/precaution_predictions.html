@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Precaution Predictions Log | SynthSoma Admin{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <div class="admin-header">
+        <div>
+            <h2><i class="fa-solid fa-shield-heart"></i> System Precaution Queries Log</h2>
+            <p>Database records for all user precaution recommendations.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.export_admin_csv', module='precaution') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export Precaution Log (CSV)
+            </a>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="card p-3 mb-4">
+        <form action="{{ url_for('admin.precaution_predictions') }}" method="GET" class="d-flex gap-2">
+            <input type="text" name="search" value="{{ search or '' }}" class="form-control" placeholder="Search by User ID, Disease, or Precaution...">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="card">
+        {% if records %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>Health Condition</th>
+                        <th>Recommended Precautions</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    <tr>
+                        <td>#{{ r.id }}</td>
+                        <td><code>{{ r.user_id }}</code></td>
+                        <td><strong>{{ r.disease_input }}</strong></td>
+                        <td style="max-width: 350px;" class="text-truncate">{{ r.precautions }}</td>
+                        <td>{{ r.created_at|datetime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('admin.precaution_predictions', page=p, search=search) }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <p class="text-muted">No precaution records found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

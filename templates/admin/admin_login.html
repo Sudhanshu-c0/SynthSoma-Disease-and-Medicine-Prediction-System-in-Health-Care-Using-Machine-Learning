@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Administrator Authentication | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container auth-wrapper">
+    <div class="auth-card auth-card-narrow">
+        <div class="auth-header text-center">
+            <div class="auth-icon-badge" style="background-color: #fee2e2; color: #b91c1c;">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h2>Admin Portal Access</h2>
+            <p>Enter administrator credentials to authenticate.</p>
+        </div>
+
+        <form action="{{ url_for('auth.login', next=url_for('admin.admin_dashboard')) }}" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Administrator ID or Email</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="admin" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Admin Security Key / Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="btn btn-secondary btn-block btn-auth">
+                <i class="fa-solid fa-shield-halved"></i> Authenticate Administrator
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

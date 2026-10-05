@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up | SynthSoma Healthcare Portal{% endblock %}
+
+{% block content %}
+<div class="container auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header text-center">
+            <div class="auth-icon-badge">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2>Create Your Account</h2>
+            <p>Access all four AI clinical prediction engines, patient reports, and history.</p>
+        </div>
+
+        <form action="{{ url_for('auth.signup') }}" method="POST" class="auth-form" novalidate>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" class="form-control {% if errors.name %}is-invalid{% endif %}" placeholder="e.g. Dr. Jane Doe" value="{{ form.name or '' }}" required>
+                    {% if errors.name %}<small class="field-error">{{ errors.name }}</small>{% endif %}
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="user_id" class="form-label">User ID <span class="required">*</span></label>
+                    <input type="text" id="user_id" name="user_id" class="form-control {% if errors.user_id %}is-invalid{% endif %}" placeholder="e.g. janedoe42" value="{{ form.user_id or '' }}" required>
+                    {% if errors.user_id %}<small class="field-error">{{ errors.user_id }}</small>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email" class="form-label">Gmail / Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" class="form-control {% if errors.email %}is-invalid{% endif %}" placeholder="name@example.com" value="{{ form.email or '' }}" required>
+                    {% if errors.email %}<small class="field-error">{{ errors.email }}</small>{% endif %}
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" class="form-control {% if errors.phone %}is-invalid{% endif %}" placeholder="e.g. +1 555-0143" value="{{ form.phone or '' }}" required>
+                    {% if errors.phone %}<small class="field-error">{{ errors.phone }}</small>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="location" class="form-label">Location / City <span class="required">*</span></label>
+                <input type="text" id="location" name="location" class="form-control {% if errors.location %}is-invalid{% endif %}" placeholder="e.g. Boston, MA, USA" value="{{ form.location or '' }}" required>
+                {% if errors.location %}<small class="field-error">{{ errors.location }}</small>{% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="password" class="form-label">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" class="form-control {% if errors.password %}is-invalid{% endif %}" placeholder="At least 6 characters" required>
+                    {% if errors.password %}<small class="field-error">{{ errors.password }}</small>{% endif %}
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="confirm_password" class="form-label">Confirm Password <span class="required">*</span></label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control {% if errors.confirm_password %}is-invalid{% endif %}" placeholder="Re-enter password" required>
+                    {% if errors.confirm_password %}<small class="field-error">{{ errors.confirm_password }}</small>{% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-auth">
+                <i class="fa-solid fa-user-check"></i> Register Account
+            </button>
+        </form>
+
+        <div class="auth-footer text-center">
+            <p>Already have a registered account? <a href="{{ url_for('auth.login') }}">Sign In here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+.auth-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 620px;
+    padding: 36px 32px;
+}
+.auth-icon-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-full);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+}
+.auth-header h2 {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+.auth-header p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.required {
+    color: var(--danger);
+}
+.field-error {
+    color: var(--danger);
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+    display: block;
+}
+.form-control.is-invalid {
+    border-color: var(--danger);
+    background-color: var(--danger-bg);
+}
+.btn-auth {
+    margin-top: 10px;
+    padding: 13px;
+    font-size: 15px;
+}
+.auth-footer {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+</style>
+{% endblock %}

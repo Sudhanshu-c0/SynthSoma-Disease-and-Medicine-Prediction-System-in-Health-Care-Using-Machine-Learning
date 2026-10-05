@@ -1,0 +1,4 @@
+/* Profile Module Styles */
+.user-profile-avatar {
+    border: 3px solid var(--primary-light);
+}

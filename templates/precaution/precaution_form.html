@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Suggest Precaution Engine | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container clinical-form-wrapper">
+    <div class="form-hero-header">
+        <div class="engine-badge engine-badge-amber">
+            <i class="fa-solid fa-shield-heart"></i> Engine 03
+        </div>
+        <h2>Suggest Precaution Engine</h2>
+        <p>Retrieve evidence-backed clinical prevention steps, lifestyle cautions, and daily guidelines.</p>
+    </div>
+
+    <form action="{{ url_for('precaution.predict') }}" method="POST" class="clinical-card">
+        <div class="form-section">
+            <label for="disease_name" class="section-label">
+                <i class="fa-solid fa-magnifying-glass"></i> Select or Enter Disease / Health Condition
+            </label>
+            <input type="text" id="disease_name" name="disease_name" list="prec_diseases" class="form-control" placeholder="e.g. Fungal infection, Acne, Malaria, Allergy, Gerd, Jaundice" required autofocus>
+            <datalist id="prec_diseases">
+                {% for d in known_diseases %}
+                <option value="{{ d|title }}"></option>
+                {% endfor %}
+            </datalist>
+            <small class="form-hint">Type any condition name or choose from the 41 validated precaution profiles.</small>
+        </div>
+
+        <div class="form-actions-bar">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-shield-halved"></i> Generate Precautions
+            </button>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.engine-badge-amber { background-color: #fef3c7; color: #d97706; }
+</style>
+{% endblock %}

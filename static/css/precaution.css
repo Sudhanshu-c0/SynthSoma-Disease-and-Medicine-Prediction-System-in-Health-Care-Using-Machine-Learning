@@ -1,0 +1,4 @@
+/* Precaution Module Specific Styles */
+.precaution-step-card {
+    border-left: 4px solid var(--warning);
+}

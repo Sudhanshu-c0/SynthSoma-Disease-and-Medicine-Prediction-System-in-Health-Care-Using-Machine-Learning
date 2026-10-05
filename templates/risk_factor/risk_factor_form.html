@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Analyse Risk Factor Engine | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container clinical-form-wrapper">
+    <div class="form-hero-header">
+        <div class="engine-badge engine-badge-rose">
+            <i class="fa-solid fa-heart-pulse"></i> Engine 04
+        </div>
+        <h2>Analyse Risk Factor Engine</h2>
+        <p>Evaluate epidemiological occurrence frequencies and primary clinical risk factors across 100 disease profiles.</p>
+    </div>
+
+    <form action="{{ url_for('risk_factor.predict') }}" method="POST" class="clinical-card">
+        <div class="form-section">
+            <label for="disease_name" class="section-label">
+                <i class="fa-solid fa-magnifying-glass"></i> Select or Enter Disease / Clinical Profile
+            </label>
+            <input type="text" id="disease_name" name="disease_name" list="risk_diseases" class="form-control" placeholder="e.g. Fungal infection, Food allergy, Gerd, Diabetes, Hypertension, Asthma" required autofocus>
+            <datalist id="risk_diseases">
+                {% for d in known_diseases %}
+                <option value="{{ d|title }}"></option>
+                {% endfor %}
+            </datalist>
+            <small class="form-hint">Type any clinical condition or pick from 100 risk factor profiles.</small>
+        </div>
+
+        <div class="form-actions-bar">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-chart-line"></i> Analyse Risk Factors
+            </button>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.engine-badge-rose { background-color: #ffe4e6; color: #e11d48; }
+</style>
+{% endblock %}

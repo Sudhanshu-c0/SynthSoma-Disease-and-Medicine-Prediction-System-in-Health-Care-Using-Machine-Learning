@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Recommended Precautions | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container result-wrapper">
+    <div class="result-header">
+        <a href="{{ url_for('precaution.precaution_form') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> New Precaution Query
+        </a>
+        <div class="action-buttons">
+            {% if result.id %}
+            <a href="{{ url_for('report.download_pdf', prediction_id=result.id) }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+            </a>
+            {% endif %}
+            <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-clock-rotate-left"></i> View History
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="card result-hero-card">
+        <div class="result-hero-content">
+            <div class="badge-status-wrap">
+                <span class="badge badge-precaution"><i class="fa-solid fa-shield-heart"></i> Precaution Advisory</span>
+                {% if result.closest_match_used %}
+                <span class="model-badge"><i class="fa-solid fa-link"></i> Matched: {{ result.matched_disease }}</span>
+                {% endif %}
+            </div>
+            <h1 class="predicted-name">{{ result.matched_disease }}</h1>
+            <p class="prediction-note">{{ result.precaution_count }} actionable clinical & lifestyle precautions recommended.</p>
+        </div>
+    </div>
+
+    <!-- Precautions Checklist Card -->
+    <div class="card p-4">
+        <div class="card-header">
+            <h4 class="card-title"><i class="fa-solid fa-list-check text-amber"></i> Clinical Care & Prevention Steps</h4>
+        </div>
+        {% if result.precautions %}
+        <div class="precaution-checklist">
+            {% for p in result.precautions %}
+            <div class="precaution-item">
+                <div class="precaution-badge-num">{{ loop.index }}</div>
+                <div class="precaution-item-content">
+                    <h5>{{ p }}</h5>
+                    <p>Evidence-based preventative action for management and recovery.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">Standard preventative hygiene and monitoring recommended.</p>
+        {% endif %}
+    </div>
+
+    <div class="disclaimer-alert-card mt-4">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+            <strong>Notice:</strong> {{ result.disclaimer }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.precaution-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+}
+.precaution-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    transition: transform 0.15s ease;
+}
+.precaution-item:hover {
+    transform: translateX(4px);
+    border-color: var(--warning);
+}
+.precaution-badge-num {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background-color: #fef3c7;
+    color: #b45309;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+}
+.precaution-item-content h5 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2px;
+}
+.precaution-item-content p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+}
+</style>
+{% endblock %}

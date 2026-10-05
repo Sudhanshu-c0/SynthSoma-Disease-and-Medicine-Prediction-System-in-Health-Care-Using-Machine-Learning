@@ -1,0 +1,10 @@
+/* Medicine Module Specific Styles */
+.medicine-card-border {
+    border-left: 4px solid var(--secondary);
+}
+
+.med-comp-tag {
+    background-color: var(--secondary-light);
+    color: var(--secondary);
+    font-weight: 600;
+}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Top Predicted Diseases (Last 7 Days) | SynthSoma Admin{% endblock %}
+
+{% block content %}
+<div class="container admin-container">
+    <div class="admin-header">
+        <div>
+            <h2><i class="fa-solid fa-ranking-star text-teal"></i> Top Predicted Diseases &mdash; Last 7 Days</h2>
+            <p>Calculated exclusively from real disease prediction records stored in the database within the previous 7 days.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        {% if top_diseases %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Disease Pathology</th>
+                        <th>Predictions Recorded</th>
+                        <th>Relative Distribution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in top_diseases %}
+                    <tr>
+                        <td><span class="rank-badge">#{{ loop.index }}</span></td>
+                        <td><strong>{{ item.disease }}</strong></td>
+                        <td><span class="count-pill">{{ item.count }}</span></td>
+                        <td style="width: 45%;">
+                            <div class="dist-bar-wrap">
+                                <div class="dist-bar dist-bar-teal" style="width: {{ (item.count / top_diseases[0].count * 100)|round }}%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <p class="text-muted">No disease prediction events recorded in the last 7 days.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Factor History | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container history-container">
+    <div class="history-header">
+        <div>
+            <h2><i class="fa-solid fa-heart-pulse"></i> Risk Factor History</h2>
+            <p>Epidemiological risk factor and occurrence query logs.</p>
+        </div>
+        <div class="history-actions">
+            <a href="{{ url_for('export.export_csv', module='risk_factor') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export Risk CSV
+            </a>
+            <a href="{{ url_for('history.history_index') }}" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-bars"></i> All Modules
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        {% if records %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Target Condition</th>
+                        <th>Matched Disease</th>
+                        <th>Risk Factors</th>
+                        <th>Occurrence</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    <tr>
+                        <td>#{{ r.id }}</td>
+                        <td><strong>{{ r.disease_input }}</strong></td>
+                        <td>{{ r.matched_disease }}</td>
+                        <td style="max-width: 250px;" class="text-truncate">{{ r.risk_factors }}</td>
+                        <td><small>{{ r.occurrence }}</small></td>
+                        <td>{{ r.created_at|datetime }}</td>
+                        <td>
+                            {% if r.prediction_id %}
+                            <a href="{{ url_for('report.download_pdf', prediction_id=r.prediction_id) }}" class="btn btn-primary btn-sm">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state text-center p-5">
+            <p class="text-muted">No risk factor queries recorded yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+/* Risk Factor Module Specific Styles */
+.risk-card-border {
+    border-left: 4px solid var(--danger);
+}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container text-center" style="padding: 90px 20px;">
+    <div style="font-size: 64px; color: var(--warning); margin-bottom: 16px;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--dark); margin-bottom: 10px;">500 - Internal Server Error</h1>
+    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 24px auto;">
+        An unexpected condition occurred within the clinical model server. The incident has been recorded.
+    </p>
+    <a href="{{ url_for('dashboard.dashboard') if current_user.is_authenticated else url_for('home.index') }}" class="btn btn-primary">
+        <i class="fa-solid fa-house"></i> Return to Homepage
+    </a>
+</div>
+{% endblock %}

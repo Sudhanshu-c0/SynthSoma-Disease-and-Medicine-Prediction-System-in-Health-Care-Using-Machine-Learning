@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Medicine Reference Engine | SynthSoma{% endblock %}
+
+{% block content %}
+<div class="container clinical-form-wrapper">
+    <div class="form-hero-header">
+        <div class="engine-badge engine-badge-blue">
+            <i class="fa-solid fa-pills"></i> Engine 02
+        </div>
+        <h2>Medicine Reference Engine</h2>
+        <p>Query model-based reference medicines, pharmaceutical compositions, and clinical descriptions.</p>
+    </div>
+
+    <form action="{{ url_for('medicine.predict') }}" method="POST" class="clinical-card">
+        <div class="form-section">
+            <label for="disease_name" class="section-label">
+                <i class="fa-solid fa-magnifying-glass"></i> Select or Enter Disease / Pathology Condition
+            </label>
+            <input type="text" id="disease_name" name="disease_name" list="diseases_list" class="form-control" placeholder="e.g. Malaria, Fungal infection, Acne, Diabetes, Asthma" required autofocus>
+            <datalist id="diseases_list">
+                {% for d in known_diseases %}
+                <option value="{{ d|title }}"></option>
+                {% endfor %}
+            </datalist>
+            <small class="form-hint">Type any pathology name or choose from the 99 validated model conditions.</small>
+        </div>
+
+        <div class="disclaimer-alert-card mb-4">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <div>
+                <strong>Important Healthcare Rule:</strong> This module is an educational reference catalog. It does NOT generate clinical prescriptions or dosages. Always consult a qualified physician or licensed pharmacist.
+            </div>
+        </div>
+
+        <div class="form-actions-bar">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-prescription-bottle-medical"></i> Retrieve Reference Medicines
+            </button>
+            <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.engine-badge-blue { background-color: #e0f2fe; color: #0284c7; }
+</style>
+{% endblock %}
